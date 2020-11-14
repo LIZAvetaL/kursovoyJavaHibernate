@@ -1,3 +1,5 @@
+package Server.Database;
+
 import Server.Model.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -12,11 +14,9 @@ public class HibernateSessionFactoryUtil {
         if (sessionFactory == null) {
             try {
                 Configuration configuration = new Configuration().configure();
-                configuration.addAnnotatedClass(User.class);
-                configuration.addAnnotatedClass(Book.class);
-                configuration.addAnnotatedClass(Busket.class);
-                configuration.addAnnotatedClass(Order.class);
-                configuration.addAnnotatedClass(Catalogue.class);
+                configuration.addAnnotatedClass(UsersEntity.class);
+                configuration.addAnnotatedClass(ProductEntity.class);
+
 
                 StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
                 sessionFactory = configuration.buildSessionFactory(builder.build());

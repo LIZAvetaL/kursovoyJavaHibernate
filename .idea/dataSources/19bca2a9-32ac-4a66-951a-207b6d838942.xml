@@ -943,7 +943,7 @@ SELECT|sys.sys_config:null
     </column>
     <column id="293" parent="287" name="price">
       <Position>5</Position>
-      <DataType>varchar(45)|0s</DataType>
+      <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
     </column>
     <index id="294" parent="287" name="idproduct_UNIQUE">

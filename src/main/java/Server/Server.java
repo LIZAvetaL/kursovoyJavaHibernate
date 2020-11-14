@@ -3,7 +3,7 @@ package Server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.SQLException;
+
 
 public class Server {
     public Server (){};
@@ -20,13 +20,7 @@ public class Server {
                 ++counter;
                 System.out.println("Client №" + counter + "is connected");
                 ServerThread thread = null;
-                try {
-                    thread = new ServerThread(socket);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
+                thread = new ServerThread(socket);
                 thread.start();
             }
         } catch (IOException var5) {

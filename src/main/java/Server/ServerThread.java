@@ -1,12 +1,11 @@
 package Server;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
+import Server.Commands.Commands;
+
 
 public class ServerThread extends Thread {
     private Socket clientSocket;
