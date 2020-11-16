@@ -919,7 +919,9 @@ SELECT|sys.sys_config:null
 </ObjectGrants>
     </user>
     <table id="287" parent="8" name="product"/>
-    <table id="288" parent="8" name="users"/>
+    <table id="288" parent="8" name="users">
+      <Engine>MyISAM</Engine>
+    </table>
     <column id="289" parent="287" name="idproduct">
       <Position>1</Position>
       <DataType>int|0s</DataType>
@@ -966,29 +968,18 @@ SELECT|sys.sys_config:null
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="298" parent="288" name="username">
+    <column id="298" parent="288" name="password">
       <Position>2</Position>
-      <DataType>varchar(45)|0s</DataType>
-      <NotNull>1</NotNull>
+      <DataType>varchar(255)|0s</DataType>
     </column>
-    <column id="299" parent="288" name="password">
+    <column id="299" parent="288" name="username">
       <Position>3</Position>
-      <DataType>varchar(45)|0s</DataType>
-      <NotNull>1</NotNull>
+      <DataType>varchar(255)|0s</DataType>
     </column>
-    <index id="300" parent="288" name="idUser_UNIQUE">
-      <ColNames>idUser</ColNames>
-      <Unique>1</Unique>
-      <Type>btree</Type>
-    </index>
-    <key id="301" parent="288" name="PRIMARY">
+    <key id="300" parent="288" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>idUser</ColNames>
       <Primary>1</Primary>
-    </key>
-    <key id="302" parent="288" name="idUser_UNIQUE">
-      <ColNames>idUser</ColNames>
-      <UnderlyingIndexName>idUser_UNIQUE</UnderlyingIndexName>
     </key>
   </database-model>
 </dataSource>

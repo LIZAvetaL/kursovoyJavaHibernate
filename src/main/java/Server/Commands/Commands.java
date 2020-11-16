@@ -1,5 +1,5 @@
 package Server.Commands;
-import Server.Services.UserService;
+
 
 
 public class Commands {
@@ -10,10 +10,17 @@ public class Commands {
         Object result = true;
         switch (commandNumber[0]) {
             case "User":
-                commands = command.split(",", 3);
-                result = UserService.checkSingIn(commands[1],commands[2]);
+                result = UserCommands.split(command);
                 break;
-
+            case "Product":
+                result = ProductCommands.split(command);
+                break;
+            case "Basket":
+                result = BasketCommands.split(command);
+                break;
+            case "Order":
+                result = OrderCommands.split(command);
+                break;
         }
         return result;
     }

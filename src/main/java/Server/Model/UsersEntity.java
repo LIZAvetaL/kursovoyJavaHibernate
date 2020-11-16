@@ -6,19 +6,18 @@ import javax.persistence.*;
 @Table(name = "users")
 public class UsersEntity {
     @Id
-    @Column(name = "idUser")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idUser;
     @Column(name = "username")
-    private String username;
+    private String login;
     @Column(name = "password")
     private String password;
 
     public UsersEntity(){}
-    public UsersEntity(int idUser, String username, String password){
+    public UsersEntity(int idUser, String login, String password){
         this.idUser=idUser;
         this.password=password;
-        this.username=username;
+        this.login=login;
     }
 
     public int getIdUser() {
@@ -30,12 +29,12 @@ public class UsersEntity {
     }
 
 
-    public String getUsername() {
-        return username;
+    public String getLogin() {
+        return login;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setLogin(String username) {
+        this.login = username;
     }
 
 
@@ -55,17 +54,9 @@ public class UsersEntity {
         UsersEntity that = (UsersEntity) o;
 
         if (idUser != that.idUser) return false;
-        if (username != null ? !username.equals(that.username) : that.username != null) return false;
+        if (login != null ? !login.equals(that.login) : that.login != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
 
         return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = idUser;
-        result = 31 * result + (username != null ? username.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
-        return result;
     }
 }

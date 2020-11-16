@@ -5,14 +5,17 @@
 <hibernate-configuration>
   <session-factory>
     <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-    <property name="connection.url">jdbc:mysql://address=(protocol=tcp)(host=localhost)(port=3306)/shop</property>
+    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/shop?serverTimezone=UTC</property>
     <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
     <property name="hibernate.show_sql">true</property>
+    <property name="hibernate.connection.username">root</property>
+    <property name="hibernate.connection.password">123456</property>
+    <property name="show_sql">true</property>
 
     <mapping class="Server.Model.ProductEntity"/>
-    <mapping resource="ProductEntityhbm.xml"/>
     <mapping class="Server.Model.UsersEntity"/>
-    <mapping resource="UsersEntityhbm.xml"/>
+
+
 
   </session-factory>
 </hibernate-configuration>
