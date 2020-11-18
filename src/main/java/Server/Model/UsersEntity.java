@@ -1,31 +1,37 @@
 package Server.Model;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class UsersEntity {
+public class UsersEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idUser;
-    @Column(name = "username")
+    private int id_user;
+    @Column(name = "login")
     private String login;
     @Column(name = "password")
     private String password;
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "user",
+            cascade = CascadeType.ALL)
+    private List<BasketEntity> basketList;
 
     public UsersEntity(){}
     public UsersEntity(int idUser, String login, String password){
-        this.idUser=idUser;
+        this.id_user=idUser;
         this.password=password;
         this.login=login;
     }
 
     public int getIdUser() {
-        return idUser;
+        return id_user;
     }
 
     public void setIdUser(int idUser) {
-        this.idUser = idUser;
+        this.id_user = idUser;
     }
 
 
@@ -46,6 +52,12 @@ public class UsersEntity {
         this.password = password;
     }
 
+    public List<BasketEntity> getBasketList() {
+        return basketList;
+    }
+    public void setBasketList(List<BasketEntity> basketList) {
+        this.basketList = basketList;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -53,7 +65,7 @@ public class UsersEntity {
 
         UsersEntity that = (UsersEntity) o;
 
-        if (idUser != that.idUser) return false;
+        if (id_user != that.id_user) return false;
         if (login != null ? !login.equals(that.login) : that.login != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
 

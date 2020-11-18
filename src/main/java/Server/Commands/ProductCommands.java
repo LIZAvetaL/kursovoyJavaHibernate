@@ -2,7 +2,6 @@ package Server.Commands;
 
 import Server.Database.HibernateSessionFactoryUtil;
 import Server.Model.ProductEntity;
-import Server.Model.UsersEntity;
 
 import java.util.List;
 
@@ -22,6 +21,8 @@ public class ProductCommands {
     private static Object showProduct() {
         List<ProductEntity> list =HibernateSessionFactoryUtil.getSessionFactory().openSession().
                 createQuery("from ProductEntity ").list();
+
+
        return list;
     }
 }

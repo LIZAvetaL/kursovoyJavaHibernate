@@ -24,7 +24,7 @@ public class UserCommands {
         return result;
     }
     public static String checkSingInClient(String username, String password) {
-        String message = "";
+        String message="" ;
         List<UsersEntity> users= HibernateSessionFactoryUtil.getSessionFactory().openSession().
                 createQuery("FROM UsersEntity ").list();
         try {
@@ -32,7 +32,7 @@ public class UserCommands {
                 String tableLogin = user.getLogin();
                 String tablePassword = user.getPassword();
                 if (tableLogin.equals(username) && tablePassword.equals(password)) {
-                    message = "successClient";
+                    message = Integer.toString(user.getIdUser());
                     break;
                 } else message = "fail";
             }
@@ -52,6 +52,7 @@ public class UserCommands {
                 String tablePassword = user.getPassword();
                 if (tableLogin.equals(username) && tablePassword.equals(password)) {
                     message = "successAdmin";
+
                     break;
                 } else message = "fail";
             }

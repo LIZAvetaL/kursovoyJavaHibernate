@@ -1,39 +1,45 @@
 package Server.Model;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
+
 
 @Entity
 @Table(name = "product")
-public class ProductEntity {
+public class ProductEntity implements Serializable{
     @Id
-    @Column(name = "idproduct")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idproduct;
+    private int id_product;
     @Column(name = "type")
     private String type;
-    @Column(name = "nameproduct")
-    private String nameproduct;
+    @Column(name = "name")
+    private String name;
     @Column(name = "amount")
     private int amount;
     @Column(name = "price")
-    private int price;
+    private double price;
+   @OneToMany(fetch = FetchType.LAZY,
+           mappedBy = "product",
+            cascade = CascadeType.ALL)
+    private List<BasketEntity> basketList;
 
     public ProductEntity(){}
 
     public ProductEntity(int idproduct, String type, String nameproduct, int amount, int price){
-        this.idproduct=idproduct;
+        this.id_product=idproduct;
         this.type=type;
-        this.nameproduct=nameproduct;
+        this.name=nameproduct;
         this.amount=amount;
         this.price=price;
     }
 
-    public int getIdproduct() {
-        return idproduct;
+    public int getId_product() {
+        return id_product;
     }
 
-    public void setIdproduct(int idproduct) {
-        this.idproduct = idproduct;
+    public void setId_product(int idproduct) {
+        this.id_product = idproduct;
     }
 
 
@@ -46,12 +52,12 @@ public class ProductEntity {
     }
 
 
-    public String getNameproduct() {
-        return nameproduct;
+    public String getName() {
+        return name;
     }
 
-    public void setNameproduct(String nameproduct) {
-        this.nameproduct = nameproduct;
+    public void setName(String nameproduct) {
+        this.name = nameproduct;
     }
 
 
@@ -64,12 +70,20 @@ public class ProductEntity {
     }
 
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
+    }
+
+    public List<BasketEntity> getBasketList() {
+        return basketList;
+    }
+
+    public void setBasketList(List<BasketEntity> basketList) {
+        this.basketList = basketList;
     }
 
     @Override
@@ -79,22 +93,13 @@ public class ProductEntity {
 
         ProductEntity that = (ProductEntity) o;
 
-        if (idproduct != that.idproduct) return false;
+        if (id_product != that.id_product) return false;
         if (amount != that.amount) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
-        if (nameproduct != null ? !nameproduct.equals(that.nameproduct) : that.nameproduct != null) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (price!= that.price) return false;
 
         return true;
     }
 
-    @Override
-    public int hashCode() {
-        int result = idproduct;
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (nameproduct != null ? nameproduct.hashCode() : 0);
-        result = 31 * result + amount;
-        result = 31 * result + price;
-        return result;
-    }
 }
