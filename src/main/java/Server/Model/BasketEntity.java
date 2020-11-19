@@ -1,10 +1,7 @@
 package Server.Model;
 
-import org.omg.CORBA.UserException;
-
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
 
 @Entity
 @Table(name = "basket")
