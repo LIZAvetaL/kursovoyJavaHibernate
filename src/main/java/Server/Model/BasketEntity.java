@@ -7,6 +7,7 @@ import java.io.Serializable;
 @Table(name = "basket")
 public class BasketEntity implements Serializable {
     @Id
+    @Column(name = "id_basket")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idBasket;
     @Column(name = "price")
@@ -21,6 +22,7 @@ public class BasketEntity implements Serializable {
             cascade=CascadeType.ALL)
     @JoinColumn (name = "product_name", referencedColumnName = "name")
     private ProductEntity product;
+    public BasketEntity(){}
 
     public int getIdBasket() {
         return idBasket;

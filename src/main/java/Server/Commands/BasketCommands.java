@@ -7,6 +7,7 @@ import Server.Model.UsersEntity;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BasketCommands {
@@ -19,8 +20,24 @@ public class BasketCommands {
                 commands = command.split(",", 4);
                 result = BasketCommands.addToBasket(commands[2], commands[3]);
                 break;
+            case "ShowBasket":
+                result = BasketCommands.showBasket();
+                break;
         }
         return result;
+    }
+
+    private static Object showBasket() {
+        List<BasketEntity> list =HibernateSessionFactoryUtil.getSessionFactory().openSession().
+                createQuery("from BasketEntity").list();
+        ArrayList<String> list2=new ArrayList<>();
+        for (BasketEntity basket:list) {
+            String name=basket.getProduct().getName();
+            String amount= String.valueOf(basket.getAmount());
+            String price= String.valueOf(basket.getPrice());
+            list2.add(name+" "+amount+" "+price);
+        }
+        return list2;
     }
 
     private static String addToBasket(String id_product, String id_user) {
