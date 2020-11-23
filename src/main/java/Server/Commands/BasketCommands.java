@@ -21,7 +21,8 @@ public class BasketCommands {
                 result = BasketCommands.addToBasket(commands[2], commands[3]);
                 break;
             case "ShowBasket":
-                result = BasketCommands.showBasket();
+                commands = command.split(",", 3);
+                result = BasketCommands.showBasket(commands[2]);
                 break;
             case "deleteBasket":
                 commands = command.split(",", 3);
@@ -42,9 +43,10 @@ public class BasketCommands {
         return "success";
     }
 
-    private static Object showBasket() {
+    private static Object showBasket(String idString) {
+        int idUser= Integer.parseInt(idString);
         List<BasketEntity> list =HibernateSessionFactoryUtil.getSessionFactory().openSession().
-                createQuery("from BasketEntity").list();
+                createQuery("from BasketEntity WHERE user.id_user=:id").setParameter("id",idUser).list();
         ArrayList<String> list2=new ArrayList<>();
         for (BasketEntity basket:list) {
             String name=basket.getProduct().getName();
