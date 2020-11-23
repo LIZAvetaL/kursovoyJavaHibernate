@@ -2,6 +2,8 @@ package Server.Commands;
 
 import Server.Database.HibernateSessionFactoryUtil;
 import Server.Model.ProductEntity;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,5 +34,12 @@ public class ProductCommands {
             list2.add(id+" "+type+" "+name+" "+amount+" "+price);
         }
        return list2;
+    }
+    public static void updateProduct(ProductEntity product){
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction tx1 = session.beginTransaction();
+        session.update(product);
+        tx1.commit();
+        session.close();
     }
 }

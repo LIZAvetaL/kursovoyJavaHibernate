@@ -14,7 +14,7 @@ public class HibernateSessionFactoryUtil {
         if (sessionFactory == null) {
             try {
                 Configuration configuration = new Configuration().configure().addAnnotatedClass(UsersEntity.class).addAnnotatedClass(ProductEntity.class)
-                        .addAnnotatedClass(BasketEntity.class);
+                        .addAnnotatedClass(BasketEntity.class).addAnnotatedClass(AdminEntity.class);
 
                 StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
                 sessionFactory = configuration.buildSessionFactory(builder.build());

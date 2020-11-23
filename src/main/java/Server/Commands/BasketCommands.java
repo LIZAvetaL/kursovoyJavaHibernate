@@ -23,8 +23,23 @@ public class BasketCommands {
             case "ShowBasket":
                 result = BasketCommands.showBasket();
                 break;
+            case "deleteBasket":
+                commands = command.split(",", 3);
+                result = BasketCommands.deleteBasket(commands[2]);
+                break;
         }
         return result;
+    }
+
+    private static String deleteBasket(String id_temp) {
+        int id= Integer.parseInt(id_temp);
+        Session session=HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        List<BasketEntity> list= session.createQuery("from BasketEntity where idBasket=:id").setParameter("id",id).list();
+        session.close();
+        BasketEntity basket=new BasketEntity();
+        basket= list.get(0);
+        BasketCommands.delete(basket);
+        return "success";
     }
 
     private static Object showBasket() {
@@ -35,7 +50,8 @@ public class BasketCommands {
             String name=basket.getProduct().getName();
             String amount= String.valueOf(basket.getAmount());
             String price= String.valueOf(basket.getPrice());
-            list2.add(name+" "+amount+" "+price);
+            String id= String.valueOf(basket.getIdBasket());
+            list2.add(name+" "+amount+" "+price+" "+id);
         }
         return list2;
     }
@@ -53,12 +69,22 @@ public class BasketCommands {
        basket.setPrice(product.get(0).getPrice());
        basket.setAmount(1);
        BasketCommands.save(basket);
+       product.get(0).setAmount(product.get(0).getAmount()-1);
+       ProductCommands.updateProduct(product.get(0));
+
        return "success";
     }
-    public static void save(BasketEntity basket) {
+    private static void save(BasketEntity basket) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
         session.save(basket);
+        tx1.commit();
+        session.close();
+    }
+    private static void delete(BasketEntity basket) {
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction tx1 = session.beginTransaction();
+        session.delete(basket);
         tx1.commit();
         session.close();
     }
