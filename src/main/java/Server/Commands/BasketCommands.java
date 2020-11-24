@@ -17,8 +17,8 @@ public class BasketCommands {
         Object result = true;
         switch (commandNumber[1]) {
             case "addToBasket":
-                commands = command.split(",", 4);
-                result = BasketCommands.addToBasket(commands[2], commands[3]);
+                commands = command.split(",", 5);
+                result = BasketCommands.addToBasket(commands[2], commands[3], commands[4]);
                 break;
             case "ShowBasket":
                 commands = command.split(",", 3);
@@ -58,20 +58,22 @@ public class BasketCommands {
         return list2;
     }
 
-    private static String addToBasket(String id_product, String id_user) {
+    private static String addToBasket(String id_product,String amountString, String id_user) {
         int idProduct=Integer.parseInt(id_product);
         int idUser=Integer.parseInt(id_user);
+        int amount= Integer.parseInt(amountString);
         Session session=HibernateSessionFactoryUtil.getSessionFactory().openSession();
         List<ProductEntity> product= session.createQuery("FROM ProductEntity WHERE id_product=:id").setParameter("id",idProduct).list();
+        if(product==null|| product.get(0).getAmount()<amount) return "fail";
         List<UsersEntity> user= session.createQuery("FROM UsersEntity WHERE id_user=:id").setParameter("id",idUser).list();
        session.close();
         BasketEntity basket=new BasketEntity();
        basket.setProduct(product.get(0));
        basket.setUser(user.get(0));
-       basket.setPrice(product.get(0).getPrice());
-       basket.setAmount(1);
+       basket.setPrice(product.get(0).getPrice()*amount);
+       basket.setAmount(amount);
        BasketCommands.save(basket);
-       product.get(0).setAmount(product.get(0).getAmount()-1);
+       product.get(0).setAmount(product.get(0).getAmount()-amount);
        ProductCommands.updateProduct(product.get(0));
 
        return "success";
