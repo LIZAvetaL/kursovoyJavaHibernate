@@ -26,8 +26,7 @@ public class ProductEntity implements Serializable{
 
     public ProductEntity(){}
 
-    public ProductEntity(int idproduct, String type, String nameproduct, int amount, int price){
-        this.id_product=idproduct;
+    public ProductEntity( String type, String nameproduct, int amount, double price){
         this.type=type;
         this.name=nameproduct;
         this.amount=amount;

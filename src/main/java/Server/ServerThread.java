@@ -9,14 +9,19 @@ import Server.Commands.Commands;
 
 public class ServerThread extends Thread {
     private Socket clientSocket;
-    private ObjectOutputStream output = null;
-    private ObjectInputStream input = null;
+    private static ObjectOutputStream output = null;
+    private static ObjectInputStream input = null;
 
     public ServerThread(Socket clientSocket)  {
         this.clientSocket = clientSocket;
     }
-    
 
+    public static ObjectInputStream getInput() {
+        return input;
+    }
+    public static ObjectOutputStream getOutput() {
+        return output;
+    }
     public void run()
     {
         try {
