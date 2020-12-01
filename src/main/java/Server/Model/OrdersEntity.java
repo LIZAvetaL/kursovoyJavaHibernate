@@ -1,11 +1,13 @@
 package Server.Model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "orders")
-public class OrdersEntity {
+public class OrdersEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
     @Column(name = "order_number")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +19,13 @@ public class OrdersEntity {
     @ManyToOne (fetch=FetchType.LAZY)
     @JoinColumn (name = "user_name", referencedColumnName = "login")
     private UsersEntity user;
+
+    public OrdersEntity(double totalPrice, UsersEntity user) {
+        this.totalPrice = totalPrice;
+        this.user = user;
+    }
+
+    public OrdersEntity() {}
 
     public int getOrderNumber() {
         return orderNumber;

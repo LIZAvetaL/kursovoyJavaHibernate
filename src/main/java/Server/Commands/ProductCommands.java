@@ -37,72 +37,65 @@ public class ProductCommands {
     }
 
     private static Object editProduct(String idString) {
-        int id= Integer.parseInt(idString);
-        Session session=HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        List<ProductEntity> product=session.createQuery("from ProductEntity where id_product=:id").setParameter("id",id).list();
-        if(product==null)return "fail";
-        /*String type=product.get(0).getType();
-        String name=product.get(0).getName();
-        String amount= String.valueOf(product.get(0).getAmount());
-        String price= String.valueOf(product.get(0).getPrice());
+        int id = Integer.parseInt(idString);
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        ProductEntity product = session.get(ProductEntity.class, id);
+        if (product == null) return "fail";
         try {
-        //ServerThread.output.writeObject(type+","+name+","+amount+","+price);
-        //String edit= (String) ServerThread.input.readObject();
-        String[] info=edit.split(",",4);
-        product.get(0).setType(info[0]);
-            product.get(0).setName(info[1]);
-            product.get(0).setAmount(Integer.parseInt(info[2]));
-            product.get(0).setPrice(Double.parseDouble(info[3]));
-            ProductCommands.updateProduct(product.get(0));
-        } catch (IOException |ClassNotFoundException e) {
+            ServerThread.getOutput().writeObject(product);
+
+            //ProductCommands.updateProduct(product.get(0));
+        } catch (IOException e) {
             e.printStackTrace();
-        }*/
-        return "success";
+
+            return "success";
+        }
+        return null;
     }
 
-    private static String deleteProduct(String idString) {
-        int id= Integer.parseInt(idString);
-        Session session=HibernateSessionFactoryUtil.getSessionFactory().openSession();
-            //List<ProductEntity> product = session.createQuery("from ProductEntity where id_product=:id").setParameter("id", id).list();
-        ProductEntity product=session.get(ProductEntity.class,id);
-        session.close();
-            if(product==null)return "fail";
+        private static String deleteProduct (String idString){
+            int id = Integer.parseInt(idString);
+            Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+            ProductEntity product = session.get(ProductEntity.class, id);
+            session.close();
+            if (product == null) return "fail";
             ProductCommands.delete(product);
-        return "success";
-    }
+            return "success";
+        }
 
-    private static String addProduct(String type, String name, String amountString, String priceString) {
-        double price= Double.parseDouble(priceString);
-        int amount= Integer.parseInt(amountString);
-        ProductEntity product=new ProductEntity(type,name,amount,price);
-        ProductCommands.save(product);
-        return "success";
-    }
+        private static String addProduct (String type, String name, String amountString, String priceString){
+            double price = Double.parseDouble(priceString);
+            int amount = Integer.parseInt(amountString);
+            ProductEntity product = new ProductEntity(type, name, amount, price);
+            ProductCommands.save(product);
+            return "success";
+        }
 
-    private static Object showProduct() {
-        List<ProductEntity> list =HibernateSessionFactoryUtil.getSessionFactory().openSession().
-                createQuery("from ProductEntity ").list();
-       return list;
-    }
-    public static void updateProduct(ProductEntity product){
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction tx1 = session.beginTransaction();
-        session.update(product);
-        tx1.commit();
-        session.close();
-    }
-    private static void delete(Object basket) {
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction tx1 = session.beginTransaction();
-        session.delete(basket);
-        tx1.commit();
-        session.close();
-    }
-    private static void save(Object user) {
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction tx1 = session.beginTransaction();
-        session.save(user);
-        tx1.commit();
-        session.close();
-    }
+        private static Object showProduct () {
+            return HibernateSessionFactoryUtil.getSessionFactory().openSession().
+                    createQuery("from ProductEntity ").list();
+
+        }
+        public static void updateProduct (ProductEntity product){
+            Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+            Transaction tx1 = session.beginTransaction();
+            session.update(product);
+            tx1.commit();
+            session.close();
+        }
+        private static void delete (Object basket){
+            Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+            Transaction tx1 = session.beginTransaction();
+            session.delete(basket);
+            tx1.commit();
+            session.close();
+        }
+        private static void save (Object user){
+            Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+            Transaction tx1 = session.beginTransaction();
+            session.save(user);
+            tx1.commit();
+            session.close();
+        }
 }
+

@@ -49,11 +49,8 @@ public class UserCommands {
     }
 
     private static String addAdmin(String login, String password) {
-        UsersEntity user = new UsersEntity();
-        AdminEntity admin=new AdminEntity();
-        user.setLogin(login);
-        user.setPassword(password);
-        admin.setUser(user);
+        UsersEntity user = new UsersEntity(login,password);
+        AdminEntity admin=new AdminEntity(user);
         UserCommands.save(admin);
         return "success";
     }
@@ -61,24 +58,15 @@ public class UserCommands {
     private static String deleteUser(String idUserString) {
         int idUSer= Integer.parseInt(idUserString);
         Session session=HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        List<UsersEntity> list=session.createQuery("from UsersEntity  where id_user=:id").setParameter("id",idUSer).list();
+        UsersEntity user=session.get(UsersEntity.class,idUSer);
         session.close();
-        UsersEntity user=list.get(0);
         UserCommands.delete(user);
         return "success";
     }
 
     private static Object showUser() {
-        List<UsersEntity> users=HibernateSessionFactoryUtil.getSessionFactory().openSession().
+        return HibernateSessionFactoryUtil.getSessionFactory().openSession().
                 createQuery("from UsersEntity").list();
-        ArrayList<String>list=new ArrayList();
-        for (UsersEntity user:users){
-            String id= String.valueOf(user.getIdUser());
-            String login=user.getLogin();
-            String password=user.getPassword();
-            list.add(id+","+login+","+password);
-        }
-        return users;
     }
 
     private static String addClient(String login, String password) {
@@ -105,7 +93,7 @@ public class UserCommands {
 
     public static String checkSingInAdmin(String login, String password) {
         List<AdminEntity> admin= HibernateSessionFactoryUtil.getSessionFactory().openSession().
-                createQuery("FROM AdminEntity where  UsersEntity.login=:log and UsersEntity.password=:pas").
+                createQuery("FROM AdminEntity where  user.login=:log and user.password=:pas").
                 setParameter("log",login).setParameter("pas",password).list();
         if(admin==null) return"fail";
         return "successAdmin";

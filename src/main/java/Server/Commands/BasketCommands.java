@@ -28,26 +28,33 @@ public class BasketCommands {
                 commands = command.split(",", 3);
                 result = BasketCommands.deleteBasket(commands[2]);
                 break;
+
         }
         return result;
+    }
+
+    public static void deleteAll(int idUser) {
+        Session session=HibernateSessionFactoryUtil.getSessionFactory().openSession();
+       List<BasketEntity> list= session.createQuery(" from BasketEntity where user.id_user=:id").setParameter("id",idUser).list();
+       session.close();
+       for(BasketEntity basket: list)
+           BasketCommands.delete(basket);
     }
 
     private static String deleteBasket(String id_temp) {
         int id= Integer.parseInt(id_temp);
         Session session=HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        List<BasketEntity> list= session.createQuery("from BasketEntity where idBasket=:id").setParameter("id",id).list();
+        BasketEntity basket= session.get(BasketEntity.class,id);
         session.close();
-        BasketEntity basket=new BasketEntity();
-        basket= list.get(0);
+        if(basket==null)return"fail";
         BasketCommands.delete(basket);
         return "success";
     }
 
     private static Object showBasket(String idString) {
         int idUser= Integer.parseInt(idString);
-        List<BasketEntity> list =HibernateSessionFactoryUtil.getSessionFactory().openSession().
+        return HibernateSessionFactoryUtil.getSessionFactory().openSession().
                 createQuery("from BasketEntity WHERE user.id_user=:id").setParameter("id",idUser).list();
-        return list;
     }
 
     private static String addToBasket(String id_product,String amountString, String id_user) {
@@ -55,18 +62,14 @@ public class BasketCommands {
         int idUser=Integer.parseInt(id_user);
         int amount= Integer.parseInt(amountString);
         Session session=HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        List<ProductEntity> product= session.createQuery("FROM ProductEntity WHERE id_product=:id").setParameter("id",idProduct).list();
-        if(product==null|| product.get(0).getAmount()<amount) return "fail";
-        List<UsersEntity> user= session.createQuery("FROM UsersEntity WHERE id_user=:id").setParameter("id",idUser).list();
+        ProductEntity product= session.get(ProductEntity.class,idProduct);
+        if(product==null|| product.getAmount()<amount) return "fail";
+        UsersEntity user= session.get(UsersEntity.class,idUser);
        session.close();
-        BasketEntity basket=new BasketEntity();
-       basket.setProduct(product.get(0));
-       basket.setUser(user.get(0));
-       basket.setPrice(product.get(0).getPrice()*amount);
-       basket.setAmount(amount);
+        BasketEntity basket=new BasketEntity(product.getPrice()*amount,amount,user,product);
        BasketCommands.save(basket);
-       product.get(0).setAmount(product.get(0).getAmount()-amount);
-       ProductCommands.updateProduct(product.get(0));
+       product.setAmount(product.getAmount()-amount);
+       ProductCommands.updateProduct(product);
        return "success";
     }
     private static void save(BasketEntity basket) {

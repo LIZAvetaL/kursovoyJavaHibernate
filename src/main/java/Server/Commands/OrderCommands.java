@@ -4,9 +4,11 @@ import Server.Database.HibernateSessionFactoryUtil;
 import Server.Model.BasketEntity;
 import Server.Model.OrdersEntity;
 import Server.Model.UsersEntity;
+import Server.ServerThread;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,43 +32,34 @@ public class OrderCommands {
 
     private static Object showOrder(String idString) {
         int idUser= Integer.parseInt(idString);
-        List<OrdersEntity> list =HibernateSessionFactoryUtil.getSessionFactory().openSession().
+        return HibernateSessionFactoryUtil.getSessionFactory().openSession().
                 createQuery("from OrdersEntity WHERE user.id_user=:id").setParameter("id",idUser).list();
-        ArrayList<String> list2=new ArrayList<>();
-        for (OrdersEntity order:list) {
-            String status=order.getStatus();
-            String price= String.valueOf(order.getTotalPrice());
-            String orderNumber= String.valueOf(order.getOrderNumber());
-            list2.add(orderNumber+","+price+","+status);
-        }
-        return list2;
     }
 
     private static String addToOrder(String idUserString) {
         int idUser= Integer.parseInt(idUserString);
         Session session= HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        List<UsersEntity> user= session.createQuery("FROM UsersEntity WHERE id_user=:id").setParameter("id",idUser).list();
+        UsersEntity user= session.get(UsersEntity.class,idUser);
         List<BasketEntity> list=session.createQuery("FROM BasketEntity where user.id_user=:id").setParameter("id",idUser).list();
         session.close();
         int totalPrice=0;
         for (BasketEntity basket:list)
             totalPrice+=basket.getPrice();
-        OrdersEntity order=new OrdersEntity();
-        order.setUser(user.get(0));
-        order.setTotalPrice(totalPrice);
+        OrdersEntity order=new OrdersEntity(totalPrice,user);
         OrderCommands.save(order);
-        return "success";
+        try {
+            ServerThread.getOutput().writeObject("success");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        BasketCommands.deleteAll(idUser);
+        return String.valueOf(totalPrice);
     }
     private static void save(OrdersEntity order) {
-        try {
-
             Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
             Transaction tx1 = session.beginTransaction();
             session.save(order);
             tx1.commit();
             session.close();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
     }
 }

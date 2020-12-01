@@ -14,6 +14,10 @@ public class AdminEntity {
     @JoinColumn (name = "user_id", referencedColumnName = "id_user")
     private UsersEntity user;
 
+    public AdminEntity(UsersEntity user) {
+        this.user = user;
+    }
+
     public AdminEntity() {}
 
     public UsersEntity getUser() {
