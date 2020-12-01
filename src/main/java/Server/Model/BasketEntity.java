@@ -6,6 +6,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "basket")
 public class BasketEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
     @Column(name = "id_basket")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +22,13 @@ public class BasketEntity implements Serializable {
     @JoinColumn (name = "product_name", referencedColumnName = "name")
     private ProductEntity product;
     public BasketEntity(){}
+
+    public BasketEntity(double price, int amount, UsersEntity user, ProductEntity product) {
+        this.price = price;
+        this.amount = amount;
+        this.user = user;
+        this.product = product;
+    }
 
     public int getIdBasket() {
         return idBasket;

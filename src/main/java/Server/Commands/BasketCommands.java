@@ -47,15 +47,7 @@ public class BasketCommands {
         int idUser= Integer.parseInt(idString);
         List<BasketEntity> list =HibernateSessionFactoryUtil.getSessionFactory().openSession().
                 createQuery("from BasketEntity WHERE user.id_user=:id").setParameter("id",idUser).list();
-        ArrayList<String> list2=new ArrayList<>();
-        for (BasketEntity basket:list) {
-            String name=basket.getProduct().getName();
-            String amount= String.valueOf(basket.getAmount());
-            String price= String.valueOf(basket.getPrice());
-            String id= String.valueOf(basket.getIdBasket());
-            list2.add(name+" "+amount+" "+price+" "+id);
-        }
-        return list2;
+        return list;
     }
 
     private static String addToBasket(String id_product,String amountString, String id_user) {
@@ -75,7 +67,6 @@ public class BasketCommands {
        BasketCommands.save(basket);
        product.get(0).setAmount(product.get(0).getAmount()-amount);
        ProductCommands.updateProduct(product.get(0));
-
        return "success";
     }
     private static void save(BasketEntity basket) {

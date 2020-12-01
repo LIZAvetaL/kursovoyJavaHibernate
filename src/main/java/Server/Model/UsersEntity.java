@@ -7,6 +7,7 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 public class UsersEntity implements Serializable {
+    private static final long serialVersionUID = 2L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_user;
@@ -28,8 +29,7 @@ public class UsersEntity implements Serializable {
     private List<OrdersEntity> ordersEntities;
 
     public UsersEntity(){}
-    public UsersEntity(int idUser, String login, String password){
-        this.id_user=idUser;
+    public UsersEntity( String login, String password){
         this.password=password;
         this.login=login;
     }
@@ -90,7 +90,6 @@ public class UsersEntity implements Serializable {
 
         UsersEntity that = (UsersEntity) o;
 
-        if (id_user != that.id_user) return false;
         if (login != null ? !login.equals(that.login) : that.login != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
 

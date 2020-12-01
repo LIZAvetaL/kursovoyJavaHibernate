@@ -78,13 +78,11 @@ public class UserCommands {
             String password=user.getPassword();
             list.add(id+","+login+","+password);
         }
-        return list;
+        return users;
     }
 
     private static String addClient(String login, String password) {
-        UsersEntity user = new UsersEntity();
-        user.setLogin(login);
-        user.setPassword(password);
+        UsersEntity user = new UsersEntity(login,password);
         UserCommands.save(user);
         return "success";
     }
@@ -97,43 +95,20 @@ public class UserCommands {
         else return "fail";
     }
 
-    public static String checkSingInClient(String username, String password) {
-        String message="" ;
+    public static String checkSingInClient(String login, String password) {
         List<UsersEntity> users= HibernateSessionFactoryUtil.getSessionFactory().openSession().
-                createQuery("FROM UsersEntity ").list();
-        try {
-            for (UsersEntity user : users) {
-                String tableLogin = user.getLogin();
-                String tablePassword = user.getPassword();
-                if (tableLogin.equals(username) && tablePassword.equals(password)) {
-                    message = Integer.toString(user.getIdUser());
-                    break;
-                } else message = "fail";
-            }
-        } catch (Exception var12) {
-            System.out.println("Exception in Table of users");
-        }
-        return message;
+                createQuery("FROM UsersEntity where login=:log and password=:pas").
+                setParameter("log",login).setParameter("pas",password).list();
+        if(users==null)return "fail";
+        return String.valueOf(users.get(0).getIdUser());
     }
 
-    public static String checkSingInAdmin(String username, String password) {
-        String message = "";
-        List<UsersEntity> users= HibernateSessionFactoryUtil.getSessionFactory().openSession().
-                createQuery("FROM UsersEntity ").list();
-        try {
-            for (UsersEntity user : users) {
-                String tableLogin = user.getLogin();
-                String tablePassword = user.getPassword();
-                if (tableLogin.equals(username) && tablePassword.equals(password)) {
-                    message = "successAdmin";
-
-                    break;
-                } else message = "fail";
-            }
-        } catch (Exception var12) {
-            System.out.println("Exception in Table of users");
-        }
-        return message;
+    public static String checkSingInAdmin(String login, String password) {
+        List<AdminEntity> admin= HibernateSessionFactoryUtil.getSessionFactory().openSession().
+                createQuery("FROM AdminEntity where  UsersEntity.login=:log and UsersEntity.password=:pas").
+                setParameter("log",login).setParameter("pas",password).list();
+        if(admin==null) return"fail";
+        return "successAdmin";
     }
 
     private static void save(Object user) {
