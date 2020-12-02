@@ -84,17 +84,17 @@ public class UserCommands {
     }
 
     public static String checkSingInClient(String login, String password) {
-        List<UsersEntity> users= HibernateSessionFactoryUtil.getSessionFactory().openSession().
+        UsersEntity users= (UsersEntity) HibernateSessionFactoryUtil.getSessionFactory().openSession().
                 createQuery("FROM UsersEntity where login=:log and password=:pas").
-                setParameter("log",login).setParameter("pas",password).list();
+                setParameter("log",login).setParameter("pas",password).uniqueResult();
         if(users==null)return "fail";
-        return String.valueOf(users.get(0).getIdUser());
+        return String.valueOf(users.getIdUser());
     }
 
     public static String checkSingInAdmin(String login, String password) {
-        List<AdminEntity> admin= HibernateSessionFactoryUtil.getSessionFactory().openSession().
+        AdminEntity admin= (AdminEntity) HibernateSessionFactoryUtil.getSessionFactory().openSession().
                 createQuery("FROM AdminEntity where  user.login=:log and user.password=:pas").
-                setParameter("log",login).setParameter("pas",password).list();
+                setParameter("log",login).setParameter("pas",password).uniqueResult();
         if(admin==null) return"fail";
         return "successAdmin";
     }

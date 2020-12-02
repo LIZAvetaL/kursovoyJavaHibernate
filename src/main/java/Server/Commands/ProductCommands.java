@@ -40,18 +40,20 @@ public class ProductCommands {
         int id = Integer.parseInt(idString);
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         ProductEntity product = session.get(ProductEntity.class, id);
+        session.close();
         if (product == null) return "fail";
         try {
             ServerThread.getOutput().writeObject(product);
-
-            //ProductCommands.updateProduct(product.get(0));
-        } catch (IOException e) {
+            product= (ProductEntity) ServerThread.getInput().readObject();
+            ProductCommands.updateProduct(product);
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
-
+        }
             return "success";
         }
-        return null;
-    }
+
+
+
 
         private static String deleteProduct (String idString){
             int id = Integer.parseInt(idString);

@@ -26,8 +26,16 @@ public class OrderCommands {
                 commands = command.split(",", 3);
                 result = OrderCommands.showOrder(commands[2]);
                 break;
+            case "showOrderAdmin":
+                result = OrderCommands.showOrderAdmin();
+                break;
         }
         return result;
+    }
+
+    private static Object showOrderAdmin() {
+        return HibernateSessionFactoryUtil.getSessionFactory().openSession()
+                .createQuery("FROM OrdersEntity ").list();
     }
 
     private static Object showOrder(String idString) {
