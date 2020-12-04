@@ -20,6 +20,9 @@ public class ProductCommands {
             case "ShowProduct":
                 result = ProductCommands.showProduct();
                 break;
+            case "showTypes":
+                result = ProductCommands.showTypes();
+                break;
             case "addProduct":
                 commands = command.split(",", 6);
                 result = ProductCommands.addProduct(commands[2],commands[3],commands[4],commands[5]);
@@ -32,8 +35,41 @@ public class ProductCommands {
                 commands = command.split(",", 3);
                 result = ProductCommands.editProduct(commands[2]);
                 break;
+            case "findProductByID":
+                commands = command.split(",", 3);
+                result = ProductCommands.findProductByID(Integer.parseInt(commands[2]));
+                break;
         }
         return result;
+    }
+    private static ArrayList<String> showTypes () {
+        List<String> listType= HibernateSessionFactoryUtil.getSessionFactory().openSession().
+                createQuery("select type from ProductEntity ").list();
+        double phone = 0;
+        double laptop = 0;
+        double printer = 0;
+        double tablet = 0;
+
+        for (String type:listType){
+            switch (type){
+                case"Телефон":phone++;break;
+                case"Ноутбук":laptop++;break;
+                case"Принтер":printer++;break;
+                case"Планшет":tablet++;break;
+            }
+        }
+        ArrayList<String> list = new ArrayList<>();
+        double all =(phone+laptop + printer + tablet);
+        double phonePart = phone / all;
+        double laptopPart = laptop / all;
+        double printerPart = printer / all;
+        double tabletPart = tablet /all;
+        list.add(Double.toString(phonePart));
+        list.add(Double.toString(laptopPart));
+        list.add(Double.toString(printerPart));
+        list.add(Double.toString(tabletPart));
+        return list;
+
     }
 
     private static Object editProduct(String idString) {
@@ -51,9 +87,6 @@ public class ProductCommands {
         }
             return "success";
         }
-
-
-
 
         private static String deleteProduct (String idString){
             int id = Integer.parseInt(idString);
@@ -78,6 +111,11 @@ public class ProductCommands {
                     createQuery("from ProductEntity ").list();
 
         }
+    public static ProductEntity findProductByID (int id) {
+        return HibernateSessionFactoryUtil.getSessionFactory().openSession().
+                get(ProductEntity.class,id);
+
+    }
         public static void updateProduct (ProductEntity product){
             Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
             Transaction tx1 = session.beginTransaction();

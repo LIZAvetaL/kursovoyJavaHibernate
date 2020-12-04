@@ -113,4 +113,9 @@ public class UserCommands {
         tx1.commit();
         session.close();
     }
+
+    public static UsersEntity findByID(int idUser) {
+        return HibernateSessionFactoryUtil.getSessionFactory().openSession()
+                .get(UsersEntity.class,idUser);
+    }
 }

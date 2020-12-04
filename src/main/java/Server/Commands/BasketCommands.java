@@ -28,17 +28,22 @@ public class BasketCommands {
                 commands = command.split(",", 3);
                 result = BasketCommands.deleteBasket(commands[2]);
                 break;
+            case "deleteAll":
+                commands = command.split(",", 3);
+                result = BasketCommands.deleteAll(Integer.parseInt(commands[2]));
+                break;
 
         }
         return result;
     }
 
-    public static void deleteAll(int idUser) {
+    public static String deleteAll(int idUser) {
         Session session=HibernateSessionFactoryUtil.getSessionFactory().openSession();
        List<BasketEntity> list= session.createQuery(" from BasketEntity where user.id_user=:id").setParameter("id",idUser).list();
        session.close();
        for(BasketEntity basket: list)
            BasketCommands.delete(basket);
+       return "succcess";
     }
 
     private static String deleteBasket(String id_temp) {

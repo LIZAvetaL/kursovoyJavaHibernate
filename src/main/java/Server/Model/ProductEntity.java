@@ -25,6 +25,11 @@ public class ProductEntity implements Serializable{
             cascade = CascadeType.ALL)
     private List<BasketEntity> basketList;
 
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "product",
+            cascade = CascadeType.ALL)
+    private List<ReviewsEntity> reviewsEntities;
+
     public ProductEntity(){}
 
     public ProductEntity( String type, String nameproduct, int amount, double price){
@@ -86,6 +91,13 @@ public class ProductEntity implements Serializable{
         this.basketList = basketList;
     }
 
+    public List<ReviewsEntity> getReviewsEntities() {
+        return reviewsEntities;
+    }
+
+    public void setReviewsEntities(List<ReviewsEntity> reviewsEntities) {
+        this.reviewsEntities = reviewsEntities;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

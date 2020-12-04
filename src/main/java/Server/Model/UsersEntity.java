@@ -27,6 +27,10 @@ public class UsersEntity implements Serializable {
             mappedBy = "user",
             cascade = CascadeType.ALL)
     private List<OrdersEntity> ordersEntities;
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "user",
+            cascade = CascadeType.ALL)
+    private List<ReviewsEntity> reviewsEntities;
 
     public UsersEntity(){}
     public UsersEntity( String login, String password){
@@ -81,6 +85,14 @@ public class UsersEntity implements Serializable {
 
     public void setOrdersEntities(List<OrdersEntity> ordersEntities) {
         this.ordersEntities = ordersEntities;
+    }
+
+    public List<ReviewsEntity> getReviewsEntities() {
+        return reviewsEntities;
+    }
+
+    public void setReviewsEntities(List<ReviewsEntity> reviewsEntities) {
+        this.reviewsEntities = reviewsEntities;
     }
 
     @Override

@@ -3,6 +3,7 @@ package Server.Commands;
 import Server.Database.HibernateSessionFactoryUtil;
 import Server.Model.BasketEntity;
 import Server.Model.OrdersEntity;
+import Server.Model.ProductEntity;
 import Server.Model.UsersEntity;
 import Server.ServerThread;
 import org.hibernate.Session;
@@ -29,8 +30,21 @@ public class OrderCommands {
             case "showOrderAdmin":
                 result = OrderCommands.showOrderAdmin();
                 break;
+            case "changeStatus":
+                commands = command.split(",", 4);
+                result = OrderCommands.changeStatus(commands[2],commands[3]);
+                break;
         }
         return result;
+    }
+
+    private static String changeStatus(String idOrderString, String status) {
+        int idOrder= Integer.parseInt(idOrderString);
+        OrdersEntity order=HibernateSessionFactoryUtil.getSessionFactory().openSession()
+                .get(OrdersEntity.class,idOrder);
+        order.setStatus(status);
+        OrderCommands.update(order);
+        return "success";
     }
 
     private static Object showOrderAdmin() {
@@ -60,7 +74,7 @@ public class OrderCommands {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        BasketCommands.deleteAll(idUser);
+        //BasketCommands.deleteAll(idUser);
         return String.valueOf(totalPrice);
     }
     private static void save(OrdersEntity order) {
@@ -69,5 +83,12 @@ public class OrderCommands {
             session.save(order);
             tx1.commit();
             session.close();
+    }
+    public static void update (Object product){
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction tx1 = session.beginTransaction();
+        session.update(product);
+        tx1.commit();
+        session.close();
     }
 }
