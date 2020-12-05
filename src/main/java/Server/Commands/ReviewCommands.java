@@ -10,16 +10,16 @@ import java.util.List;
 
 public class ReviewCommands {
     public static Object split(String command) {
-        String[] commandNumber = command.split(",", 3);
+        String[] commandNumber = command.split("_", 3);
         String[] commands;
         Object result = true;
         switch (commandNumber[1]) {
             case "showReviews":
-                commands = command.split(",", 3);
+                commands = command.split("_", 3);
                 result = ReviewCommands.showReviews(commands[2]);
                 break;
             case "addReview":
-                commands = command.split(",", 5);
+                commands = command.split("_", 5);
                 result = ReviewCommands.addReview(commands[2],commands[3],commands[4]);
                 break;
 

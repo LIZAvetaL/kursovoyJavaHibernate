@@ -13,7 +13,7 @@ import java.util.List;
 
 public class ProductCommands {
     public static Object split(String command) {
-        String[] commandNumber = command.split(",", 3);
+        String[] commandNumber = command.split("_", 3);
         String[] commands;
         Object result = true;
         switch (commandNumber[1]) {
@@ -24,24 +24,37 @@ public class ProductCommands {
                 result = ProductCommands.showTypes();
                 break;
             case "addProduct":
-                commands = command.split(",", 6);
+                commands = command.split("_", 6);
                 result = ProductCommands.addProduct(commands[2],commands[3],commands[4],commands[5]);
                 break;
             case "deleteProduct":
-                commands = command.split(",", 3);
+                commands = command.split("_", 3);
                 result = ProductCommands.deleteProduct(commands[2]);
                 break;
             case "editProduct":
-                commands = command.split(",", 3);
+                commands = command.split("_", 3);
                 result = ProductCommands.editProduct(commands[2]);
                 break;
             case "findProductByID":
-                commands = command.split(",", 3);
+                commands = command.split("_", 3);
                 result = ProductCommands.findProductByID(Integer.parseInt(commands[2]));
+                break;
+            case "findProductByTypeAndPrice":
+                commands = command.split("_", 5);
+                result = ProductCommands.findProductByTypeAndPrice(commands[2], commands[3],commands[4]);
                 break;
         }
         return result;
     }
+
+    private static Object findProductByTypeAndPrice(String type, String beginString, String endString) {
+        Double begin= Double.valueOf(beginString), end= Double.valueOf(endString);
+        List<ProductEntity> list=HibernateSessionFactoryUtil.getSessionFactory().openSession()
+                .createQuery("from ProductEntity where type=:type and price>=:begin and price<=:end")
+                .setParameter("type",type).setParameter("begin",begin).setParameter("end",end).list();
+        return list;
+    }
+
     private static ArrayList<String> showTypes () {
         List<String> listType= HibernateSessionFactoryUtil.getSessionFactory().openSession().
                 createQuery("select type from ProductEntity ").list();

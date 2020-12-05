@@ -12,24 +12,24 @@ import java.util.List;
 
 public class BasketCommands {
     public static Object split(String command) {
-        String[] commandNumber = command.split(",", 3);
+        String[] commandNumber = command.split("_", 3);
         String[] commands;
         Object result = true;
         switch (commandNumber[1]) {
             case "addToBasket":
-                commands = command.split(",", 5);
+                commands = command.split("_", 5);
                 result = BasketCommands.addToBasket(commands[2], commands[3], commands[4]);
                 break;
             case "ShowBasket":
-                commands = command.split(",", 3);
+                commands = command.split("_", 3);
                 result = BasketCommands.showBasket(commands[2]);
                 break;
             case "deleteBasket":
-                commands = command.split(",", 3);
+                commands = command.split("_", 3);
                 result = BasketCommands.deleteBasket(commands[2]);
                 break;
             case "deleteAll":
-                commands = command.split(",", 3);
+                commands = command.split("_", 3);
                 result = BasketCommands.deleteAll(Integer.parseInt(commands[2]));
                 break;
 

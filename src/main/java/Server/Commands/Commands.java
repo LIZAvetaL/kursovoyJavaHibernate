@@ -5,7 +5,7 @@ package Server.Commands;
 public class Commands {
 
     public static Object split(String command) {
-        String[] commandNumber = command.split(",", 2);
+        String[] commandNumber = command.split("_", 2);
         String[] commands;
         Object result = true;
         switch (commandNumber[0]) {

@@ -15,23 +15,23 @@ import java.util.List;
 
 public class OrderCommands {
     public static Object split(String command) {
-        String[] commandNumber = command.split(",", 3);
+        String[] commandNumber = command.split("_", 3);
         String[] commands;
         Object result = true;
         switch (commandNumber[1]) {
             case "addToOrder":
-                commands = command.split(",", 3);
+                commands = command.split("_", 3);
                 result = OrderCommands.addToOrder(commands[2]);
                 break;
             case "showOrder":
-                commands = command.split(",", 3);
+                commands = command.split("_", 3);
                 result = OrderCommands.showOrder(commands[2]);
                 break;
             case "showOrderAdmin":
                 result = OrderCommands.showOrderAdmin();
                 break;
             case "changeStatus":
-                commands = command.split(",", 4);
+                commands = command.split("_", 4);
                 result = OrderCommands.changeStatus(commands[2],commands[3]);
                 break;
         }
